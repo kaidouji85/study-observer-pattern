@@ -13,12 +13,10 @@ export class EqualJudgement {
    *
    * @constructor
    * @param root 本コンポネントをバインドするルート要素
-   * @param reverse 文字反転結果の初期値
-   * @param suffix 末尾追加結果の初期値
    */
-  constructor({root, reverse, suffix}) {
-    this._reverse = reverse;
-    this._suffix = suffix;
+  constructor(root) {
+    this._reverse = '';
+    this._suffix = '';
 
     const dom = document.createElement('div');
     dom.innerHTML = `

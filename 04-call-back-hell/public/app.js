@@ -24,11 +24,7 @@ class App {
     const body = window.document.body || document.createElement('body');
     this._reverseString = new ReverseString(body, this._onReverseChange.bind(this));
     this._addSuffix = new AddSuffix(body, this._onSuffixChange.bind(this));
-    this._equalJudgement = new EqualJudgement({
-      root: body,
-      reverse: '',
-      suffix: '',
-    });
+    this._equalJudgement = new EqualJudgement(body);
   }
 
   /**
