@@ -11,12 +11,14 @@ export class CharacterProcessing {
    * コンストラクタ
    *
    * @param {HTMLElement} root 本コンポネントをバインドするHTML要素
+   * @param {String} label 入力項目のラベル
    * @param {@function<String => void>>} onSubmitClick 実行ボタンがクリックされた際のイベント
    */
-  constructor({root, onSubmitClick}) {
+  constructor({root, label, onSubmitClick}) {
     const dom = document.createElement('div');
     dom.innerHTML = `
       <span class="string-form">
+        <label class="string-form__label">${label}</label>
         <input class="string-form__input" type="text">
         <button type="button" class="string-form__submit">実行</button>
         <span class="string-form__result"></span>

@@ -16,6 +16,7 @@ export class ReverseString {
   constructor(root) {
     this._view = new CharacterProcessing({
       root: root,
+      label: '文字反転',
       onSubmitClick: this._onSubmitClick.bind(this)
     });
   }

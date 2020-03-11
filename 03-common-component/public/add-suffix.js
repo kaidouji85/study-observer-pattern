@@ -16,6 +16,7 @@ export class AddSuffix {
   constructor(root) {
     this._view = new CharacterProcessing({
       root: root,
+      label: '末尾追加',
       onSubmitClick: this._onSubmitClick.bind(this)
     })
   }
