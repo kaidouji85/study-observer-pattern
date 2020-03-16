@@ -2,9 +2,8 @@
  * イベントストリーム
  *
  * @typedef CharacterProcessingNotifier
- * @property {Observable<string>>} submit$ 実行ボタンを押した時のストリーム
+ * @property {Observable<String>} submit$ 実行ボタンを押した時のストリーム
  */
-
 
 /**
  * 文字加工 入力フォーム ビュー

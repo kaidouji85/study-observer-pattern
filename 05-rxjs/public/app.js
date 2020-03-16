@@ -23,21 +23,12 @@ class App {
   constructor() {
     const body = window.document.body || document.createElement('body');
     this._reverseString = new ReverseString(body);
-    this._addSuffix = new AddSuffix(body, this._onSuffixChange.bind(this));
+    this._addSuffix = new AddSuffix(body);
 
     this._equalJudgement = new EqualJudgement(
       body,
-      this._reverseString.notifier().resultChange$
+      this._reverseString.notifier().resultChange$,
+      this._addSuffix.notifier().resultChange$
     );
-  }
-
-  /**
-   * 末尾追加結果が変更された際の処理
-   *
-   * @param suffix 変更された結果
-   * @private
-   */
-  _onSuffixChange(suffix) {
-    this._equalJudgement.onSuffixChange(suffix);
   }
 }

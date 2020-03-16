@@ -1,11 +1,18 @@
 import {CharacterProcessing} from "./character-processing.js";
 
 /**
+ * 文字加工 末尾追加 イベント通知
+ *
+ * @typedef AddSuffixNotifier
+ * @param {Observable<String>} resultChange$ 加工結果変更のイベントストリーム
+ */
+
+/**
  * 文字加工 末尾に「なのだよ」を追加する
  *
  * @class AddSuffix
  * @property {CharacterProcessing} _view ビュー
- * @property {String => void} _onResultChange 文字加工結果が変更された場合に呼ばれるコールバック関数
+ * @property {Observable<String>} _resultChange$ 加工結果変更のイベントストリーム
  */
 export class AddSuffix {
   /**
@@ -13,27 +20,39 @@ export class AddSuffix {
    *
    * @constructor
    * @param {HTMLElement} root 本コンポネントをバインドするルート要素
-   * @param {String => value} onResultChange 文字加工結果が変更された場合に呼ばれるコールバック関数
    */
-  constructor(root, onResultChange) {
+  constructor(root) {
     this._view = new CharacterProcessing({
       root: root,
-      label: '末尾追加',
-      onSubmitClick: this._onSubmitClick.bind(this)
+      label: '末尾追加'
     });
-    this._view.notifier().submit$.subscribe(this._onSubmitClick.bind(this));
-    this._onResultChange = onResultChange;
+    this._resultChange$ = this._view.notifier().submit$.pipe(
+      rxjs.operators.map(v => this._addSuffix(v)),
+      rxjs.operators.tap(v => {
+        this._view.update(v);
+      })
+    );
   }
 
   /**
-   * 実行ボタンをクリックした際のイベント
+   * イベント通知を取得する
    *
-   * @param value 入力内容
+   * @return {AddSuffixNotifier} イベント通知
+   */
+  notifier() {
+    return {
+      resultChange$: this._resultChange$
+    };
+  }
+
+  /**
+   * 指定した文字列に末尾を追加する
+   *
+   * @param origin 加工する文字
+   * @return {string} 加工結果
    * @private
    */
-  _onSubmitClick(value) {
-    const addSuffix = `${value} なのだよ`;
-    this._view.update(addSuffix);
-    this._onResultChange(addSuffix);
+  _addSuffix(origin) {
+    return `${origin} なのだよ`;
   }
 }

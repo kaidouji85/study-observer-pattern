@@ -13,9 +13,10 @@ export class EqualJudgement {
    *
    * @constructor
    * @param {HTMLElement} root 本コンポネントをバインドするルート要素
-   * @param {Observable<string>} 文字反転結果が変更された際のイベントストリーム
+   * @param {Observable<String>} 文字反転結果が変更された際のイベントストリーム
+   * @param {Observable<String>} 末尾追加結果が変更された際のイベントストリーム
    */
-  constructor(root, reverseChange$) {
+  constructor(root, reverseChange$, suffixChange$) {
     this._reverse = '';
     this._suffix = '';
 
@@ -28,6 +29,7 @@ export class EqualJudgement {
     this._root = dom.querySelector('.equal-judgement') || document.createElement('span');
 
     reverseChange$.subscribe(this._onReverseChange.bind(this));
+    suffixChange$.subscribe(this._onSuffixChange.bind(this));
 
     this._update();
   }
@@ -48,7 +50,7 @@ export class EqualJudgement {
    *
    * @param result 変更された内容
    */
-  onSuffixChange(result) {
+  _onSuffixChange(result) {
     this._suffix = result;
     this._update();
   }

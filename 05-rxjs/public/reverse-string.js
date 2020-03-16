@@ -27,12 +27,11 @@ export class ReverseString {
       label: '文字反転',
     });
     this._resultChange$ = this._view.notifier().submit$.pipe(
-      rxjs.operators.map(v => this._getReverse(v)),
+      rxjs.operators.map(v => this._reverse(v)),
       rxjs.operators.tap(v => {
         this._view.update(v)
       })
     );
-
   }
 
   /**
@@ -53,7 +52,7 @@ export class ReverseString {
    * @return {string} 加工結果
    * @private
    */
-  _getReverse(origin) {
+  _reverse(origin) {
     return origin.split('')
       .reverse()
       .join('');
