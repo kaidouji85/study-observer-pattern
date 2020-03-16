@@ -12,9 +12,10 @@ export class EqualJudgement {
    * コンストラクタ
    *
    * @constructor
-   * @param root 本コンポネントをバインドするルート要素
+   * @param {HTMLElement} root 本コンポネントをバインドするルート要素
+   * @param {Observable<string>} 文字反転結果が変更された際のイベントストリーム
    */
-  constructor(root) {
+  constructor(root, reverseChange$) {
     this._reverse = '';
     this._suffix = '';
 
@@ -26,6 +27,8 @@ export class EqualJudgement {
 
     this._root = dom.querySelector('.equal-judgement') || document.createElement('span');
 
+    reverseChange$.subscribe(this._onReverseChange.bind(this));
+
     this._update();
   }
 
@@ -33,8 +36,9 @@ export class EqualJudgement {
    * 文字反転結果が変更された際に呼ばれるメソッド
    *
    * @param result 変更された内容
+   * @private
    */
-  onReverseChange(result) {
+  _onReverseChange(result) {
     this._reverse = result;
     this._update();
   }

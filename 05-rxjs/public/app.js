@@ -22,19 +22,13 @@ class App {
    */
   constructor() {
     const body = window.document.body || document.createElement('body');
-    this._reverseString = new ReverseString(body, this._onReverseChange.bind(this));
+    this._reverseString = new ReverseString(body);
     this._addSuffix = new AddSuffix(body, this._onSuffixChange.bind(this));
-    this._equalJudgement = new EqualJudgement(body);
-  }
 
-  /**
-   * 文字反転結果が変更された際の処理
-   *
-   * @param reverse 変更された結果
-   * @private
-   */
-  _onReverseChange(reverse) {
-    this._equalJudgement.onReverseChange(reverse);
+    this._equalJudgement = new EqualJudgement(
+      body,
+      this._reverseString.notifier().resultChange$
+    );
   }
 
   /**

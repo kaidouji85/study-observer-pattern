@@ -1,11 +1,18 @@
 import {CharacterProcessing} from "./character-processing.js";
 
 /**
+ * 文字加工 反転 イベント通知
+ *
+ * @typedef ReverseStringNotifier
+ * @property {Observable<String>} resultChange$ 加工結果変更のイベントストリーム
+ */
+
+/**
  * 文字加工 反転
  *
  * @class ReverseString
  * @property {CharacterProcessing} _view ビュー
- * @property {String => void} _onResultChange 文字加工結果が変更された場合に呼ばれるコールバック関数
+ * @property {Observable<String>} _resultChange$ 加工結果変更のイベントストリーム
  */
 export class ReverseString {
   /**
@@ -13,28 +20,42 @@ export class ReverseString {
    *
    * @constructor
    * @param {HTMLElement} root 本コンポネントをバインドするルート要素
-   * @param {String => value} onResultChange 文字加工結果が変更された場合に呼ばれるコールバック関数
    */
-  constructor(root, onResultChange) {
+  constructor(root) {
     this._view = new CharacterProcessing({
       root: root,
       label: '文字反転',
     });
-    this._view.notifier().submit$.subscribe(this._onSubmitClick.bind(this));
-    this._onResultChange = onResultChange;
+    this._resultChange$ = this._view.notifier().submit$.pipe(
+      rxjs.operators.map(v => this._getReverse(v)),
+      rxjs.operators.tap(v => {
+        this._view.update(v)
+      })
+    );
+
   }
 
   /**
-   * 実行ボタンがクリックされた際のイベント
+   * イベント通知を取得する
    *
-   * @param value 入力内容
+   * @return {ReverseStringNotifier} イベント通知
+   */
+  notifier() {
+    return {
+      resultChange$: this._resultChange$
+    };
+  }
+
+  /**
+   * 指定した文字列を反転される
+   *
+   * @param origin 加工する文字
+   * @return {string} 加工結果
    * @private
    */
-  _onSubmitClick(value) {
-    const reverse = value.split('')
+  _getReverse(origin) {
+    return origin.split('')
       .reverse()
       .join('');
-    this._view.update(reverse);
-    this._onResultChange(reverse);
   }
 }
