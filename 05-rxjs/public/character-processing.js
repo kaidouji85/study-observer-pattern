@@ -1,10 +1,19 @@
 /**
+ * イベントストリーム
+ *
+ * @typedef CharacterProcessingNotifier
+ * @property {Observable<string>>} submit$ 実行ボタンを押した時のストリーム
+ */
+
+
+/**
  * 文字加工 入力フォーム ビュー
  *
  * @class CharacterProcessing
  * @property {HTMLElement} _input 入力内容
- * @property {HTMLElement} _submit 実行ボタン
+ * @property {HTMLElement} _submitButton 実行ボタン
  * @property {HTMLElement} _result 反転した結果を表示する場所
+ * @property {Observable<string>} _submit$ ボタンをクリックした際のイベントストリーム
  */
 export class CharacterProcessing {
   /**
@@ -28,11 +37,10 @@ export class CharacterProcessing {
 
     this._input = dom.querySelector('.string-form__input') || document.createElement('input');
 
-    this._submit = dom.querySelector('.string-form__submit')  || document.createElement('button');
-    this._submit.addEventListener('click', e => {
-      const origin = this._input.value;
-      onSubmitClick(origin);
-    });
+    this._submitButton = dom.querySelector('.string-form__submit')  || document.createElement('button');
+    this._submit$ = rxjs.fromEvent(this._submitButton, 'click').pipe(
+      rxjs.operators.map(e => this._input.value)
+    );
 
     this._result = dom.querySelector('.string-form__result') || document.createElement('span');
   }
@@ -44,5 +52,16 @@ export class CharacterProcessing {
    */
   update(result) {
     return this._result.innerText = result
+  }
+
+  /**
+   * イベント通知を取得する
+   *
+   * @return {CharacterProcessingNotifier}
+   */
+  notifier() {
+    return {
+      submit$: this._submit$
+    };
   }
 }

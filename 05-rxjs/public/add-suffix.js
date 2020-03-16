@@ -21,6 +21,7 @@ export class AddSuffix {
       label: '末尾追加',
       onSubmitClick: this._onSubmitClick.bind(this)
     });
+    this._view.notifier().submit$.subscribe(this._onSubmitClick.bind(this));
     this._onResultChange = onResultChange;
   }
 
